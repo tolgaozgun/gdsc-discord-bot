@@ -9,8 +9,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 import time
-from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 
 
@@ -106,7 +106,7 @@ async def register(interaction:discord.Interaction, url: str):
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
-    wd = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=options)
+    wd = webdriver.Chrome(options=options)
     wd.get(url)
     time.sleep(8)  # Allow time for the page to load
     soup = BeautifulSoup(wd.page_source, 'lxml')
