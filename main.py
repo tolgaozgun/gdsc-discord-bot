@@ -90,17 +90,20 @@ def email_exists_in_csv(email_to_check, filename='emails.csv'):
 @bot.tree.command(name="register", description="Register a Google Developer Profile URL", )
 async def register(interaction:discord.Interaction, url: str, email: str):
     
+    await interaction.message.delete()
+    user = interaction.user
+    bot_message = await interaction.channel.send(f"Lütfen bekleyin... {user.mention}")
     user_roles = interaction.user.roles
     
     if user_roles is not None:
         for role in user_roles:
             if role.name == "Attendee":
-                await interaction.response.send_message("Hata: Zaten kayıt oldunuz.")
+                await interaction.channel.send(f"Hata: Zaten kayıt oldunuz. {user.mention}")
                 print("You have already registered.")
                 return
             
     if not email_exists_in_csv(email, filename='emails.csv'):
-        await interaction.response.send_message("Hata: E-posta adresiniz kayıtlı değil.")
+        await interaction.channel.send(f"Hata: E-posta adresiniz kayıtlı değil. {user.mention}")
         print("Error: Your email is not registered.")
         return
     print("Email is registered.")
@@ -111,11 +114,9 @@ async def register(interaction:discord.Interaction, url: str, email: str):
     
     # Validate URL format
     if not match_regex(url):
-        await interaction.response.send_message("Hata: URL gerekli formata uymuyor.")
+        await interaction.channel.send(f"Hata: URL gerekli formatta değil. {user.mention}")
         print("Error: URL does not match the required format.")
         return
-    
-    await interaction.response.send_message("Lütfen bekleyin...")
     
     # Check for devsite-profiles-splash--text class in the page
     options = Options()
@@ -131,8 +132,7 @@ async def register(interaction:discord.Interaction, url: str, email: str):
 
     # Check for the presence of the specific class
     if soup.find_all('div', {'class': 'devsite-profiles-splash--text'}):
-        msg = await interaction.original_response()
-        await msg.edit(content="Hata: Bu profil ya da URL halka açık değil.")
+        await interaction.channel.send(f"Hata: Bu profil ya da URL halka açık değil. {user.mention}")
         print("Error: This profile is either not public or URL is wrong.")
         return
     
@@ -151,24 +151,20 @@ async def register(interaction:discord.Interaction, url: str, email: str):
     try:
         cursor.execute(query, data)
         connection.commit()
-        msg = await interaction.original_response()
-        await msg.edit(content="Başarılı: URL başarıyla kaydedildi.")
+        await interaction.channel.send(f"Başarılı: URL başarıyla kaydedildi. {user.mention}")
         print("URL registered successfully.")
         
         
         role=discord.utils.get(interaction.guild.roles, name="Attendee")
         if role:
             await interaction.user.add_roles(role)
-            msg = await interaction.original_response()
-            await msg.edit(content="Başarılı: URL başarıyla kaydedildi ve rol atandı.")
+            await interaction.channel.send(f"Başarılı: URL başarıyla kaydedildi ve rol atandı. {user.mention}")
             print("URL registered successfully and role assigned.")
         else:
-            msg = await interaction.original_response()
-            await msg.edit(content="Hata: URL başarıyla kaydedildi. Ancak belirtilen rol bulunamadı.")
+            await interaction.channel.send(f"Hata: URL başarıyla kaydedildi. Ancak belirtilen rol bulunamadı. {user.mention}")
             print("URL registered successfully. However, the specified role could not be found.")
     except mysql.connector.Error as error:
-        msg = await interaction.original_response()
-        await msg.edit(content=f"MYSQL Hata: {error}")
+        await interaction.channel.send(f"Hata: URL kaydedilirken bir hata oluştu. {user.mention}")
     finally:
         if connection.is_connected():
             cursor.close()

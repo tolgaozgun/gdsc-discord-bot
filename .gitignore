@@ -4,3 +4,6 @@
 
 venv/*
 venv/
+
+emails.csv
+*.csv
