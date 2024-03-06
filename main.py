@@ -11,8 +11,7 @@ from bs4 import BeautifulSoup
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
-
+import csv
 
 dotenv.load_dotenv()
 # discord.Intents.message_content = True #v2
@@ -75,11 +74,21 @@ def match_regex(url):
         r'http://g.dev/\w+']
     
     return any(re.match(url_to_match, url) for url_to_match in urls_to_match)
-    
+
+
+            
+def email_exists_in_csv(email_to_check, filename='emails.csv'):
+    """Check if a specific email exists in a CSV file."""
+    with open(filename, mode='r', newline='', encoding='utf-8') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if email_to_check in row:
+                return True
+    return False
 
 # Register command implementation
 @bot.tree.command(name="register", description="Register a Google Developer Profile URL", )
-async def register(interaction:discord.Interaction, url: str):
+async def register(interaction:discord.Interaction, url: str, email: str):
     
     user_roles = interaction.user.roles
     
@@ -90,7 +99,15 @@ async def register(interaction:discord.Interaction, url: str):
                 print("You have already registered.")
                 return
             
+    if not email_exists_in_csv(email, filename='emails.csv'):
+        await interaction.response.send_message("Hata: E-posta adresiniz kayıtlı değil.")
+        print("Error: Your email is not registered.")
+        return
+    print("Email is registered.")
+            
     url = fix_regex(url)
+    
+    
     
     # Validate URL format
     if not match_regex(url):
