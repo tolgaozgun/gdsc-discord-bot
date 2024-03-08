@@ -39,7 +39,7 @@ async def register_command(bot, interaction: discord.Interaction, url: str, emai
     
     if not check_profile_exists(url):
         msg = await interaction.original_response()
-        await msg.edit(content="Hata: Bu profil ya da URL halka açık değil.")
+        await msg.edit(content="Hata: Bu profil ya da URL herkese açık değil.")
         logging.error(f"Error: Profile or URL is not public, url: {url}")
         return
     
