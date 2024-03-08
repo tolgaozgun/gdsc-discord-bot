@@ -21,5 +21,5 @@ def check_profile_exists(profile_url: str):
 
     # Check for the presence of the specific class
     if soup.find_all('div', {'class': 'devsite-profiles-splash--text'}):
-        return False
-    return True
+        return True
+    return False
