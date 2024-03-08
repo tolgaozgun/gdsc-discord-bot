@@ -38,13 +38,19 @@ def add_user_to_db(
     query = "INSERT INTO user_urls (user_id, username, url, email) VALUES (%s, %s, %s, %s)"
     data = (user_id, username, profile_url, email)
     
+    error = False
+    
     try:
         cursor.execute(query, data)
         connection.commit()
     except mysql.connector.Error as error:
         logging.error(f"DB Error: {error}")
-    finally:
+        error = True
+    finally: 
         if connection.is_connected():
             cursor.close()
             connection.close()
+    
+    return not error
+    
     

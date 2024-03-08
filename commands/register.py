@@ -54,6 +54,7 @@ async def register_command(bot, interaction: discord.Interaction, url: str, emai
         msg = await interaction.original_response()
         await msg.edit(content="Hata: URL kaydedilemedi.")
         logging.error(f"Error: URL could not be saved, url: {url}")
+        return
         
     msg = await interaction.original_response()
     await msg.edit(content="Başarılı: URL başarıyla kaydedildi.")
