@@ -82,7 +82,9 @@ def email_exists_in_csv(email_to_check, filename='emails.csv'):
     with open(filename, mode='r', newline='', encoding='utf-8') as file:
         reader = csv.reader(file)
         for row in reader:
-            if email_to_check in row.lower():
+            # Check if the email exists in the row
+            # without case sensitivity
+            if email_to_check.lower() in [field.lower() for field in row]:
                 return True
     return False
 
@@ -99,7 +101,7 @@ async def register(interaction:discord.Interaction, url: str, email: str):
                 print("You have already registered.")
                 return
             
-    if not email_exists_in_csv(email.lower(), filename='emails.csv'):
+    if not email_exists_in_csv(email, filename='emails.csv'):
         await interaction.response.send_message("Hata: E-posta adresiniz kayıtlı değil.")
         print("Error: Your email is not registered.")
         return
