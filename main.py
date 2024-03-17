@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+from commands.scrape import scrape_command
 from db import create_db_tables
 from config import DISCORD_TOKEN
 from commands.register import register_command
@@ -22,5 +23,16 @@ async def on_ready():
 @bot.tree.command(name="register", description="Register a Google Developer Profile URL")
 async def register(interaction: discord.Interaction, url: str, email: str):
     await register_command(bot, interaction, url, email)
+
+    
+@bot.tree.command(name="scan", description="Check badge status")
+@commands.has_permissions(administrator=True)
+async def register(interaction: discord.Interaction):
+    await scrape_command(bot, interaction,)
+
+@bot.tree.command(name="badge", description="Check your own badge status")
+@commands.has_permissions(administrator=True)
+async def register(interaction: discord.Interaction):
+    await scrape_command(bot, interaction,)
 
 bot.run(DISCORD_TOKEN)
