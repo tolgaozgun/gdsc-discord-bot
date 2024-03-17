@@ -1,6 +1,10 @@
 import discord
 from discord.ext import commands
-from commands.scrape import scrape_command
+from commands.badge import badge_command
+from commands.give_role import give_role_command
+from commands.ingest import ingest_command
+from commands.scan import scan_command
+from commands.total import total_command
 from db import create_db_tables
 from config import DISCORD_TOKEN
 from commands.register import register_command
@@ -28,11 +32,31 @@ async def register(interaction: discord.Interaction, url: str, email: str):
 @bot.tree.command(name="scan", description="Check badge status")
 @commands.has_permissions(administrator=True)
 async def register(interaction: discord.Interaction):
-    await scrape_command(bot, interaction,)
+    await scan_command(bot, interaction,)
 
 @bot.tree.command(name="badge", description="Check your own badge status")
+async def register(interaction: discord.Interaction):
+    await badge_command(bot, interaction)
+
+@bot.tree.command(name="badge-admin", description="Check someone else's status")
+@commands.has_permissions(administrator=True)
+async def register(interaction: discord.Interaction, user: discord.User):
+    await badge_command(bot, interaction, user)
+    
+@bot.tree.command(name="total", description="Check total badge count")
 @commands.has_permissions(administrator=True)
 async def register(interaction: discord.Interaction):
-    await scrape_command(bot, interaction,)
+    await total_command(bot, interaction)
 
+@bot.tree.command(name="ingest", description="Add users to the db from an excel file")
+@commands.has_permissions(administrator=True)
+async def register(interaction: discord.Interaction, file: discord.Attachment):
+    await ingest_command(bot, interaction, file)
+
+
+@bot.tree.command(name="giverole", description="Give Attendee role to users")
+@commands.has_permissions(administrator=True)
+async def register(interaction: discord.Interaction):
+    await give_role_command(bot, interaction)
+    
 bot.run(DISCORD_TOKEN)
