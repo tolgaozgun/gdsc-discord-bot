@@ -15,8 +15,12 @@ async def badge_command(bot, interaction: discord.Interaction, user: discord.Use
             await interaction.response.send_message(f"Hata: {interaction.user.mention} sadece kendi badge'lerinizi görebilirsiniz.")
             return
         
+        
+    
     # Get user roles
-    user_roles = interaction.user.roles
+    target_user = await interaction.guild.fetch_member(user.id)
+    
+    user_roles = target_user.roles
     
     # Check if the user has the "Attendee" role
     if not any(role.name == "Attendee" for role in user_roles):
