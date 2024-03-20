@@ -52,7 +52,7 @@ If you encounter any issues or have feature suggestions, please open an issue on
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the Apache License - see the LICENSE file for details.
 
 ## Acknowledgments
 
