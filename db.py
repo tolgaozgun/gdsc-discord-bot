@@ -165,7 +165,7 @@ def get_badge_info_with_username(username: str):
     return None
 
 
-def get_all_badge_info_as_xlsx():
+def get_all_badge_info_as_xlsx(file_name = "badge_info.xlsx"):
     # Convert badge_info database table to a xlsx file
     connection = db_connect()
     cursor = connection.cursor()
@@ -177,8 +177,6 @@ def get_all_badge_info_as_xlsx():
     if not result:
         logging.error("get_all_badge_info_as_xlsx: result returned None.")
         return None
-    
-    file_name = "badge_info.xlsx"
     
     # Delete the file if it exists
     try:
