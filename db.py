@@ -163,8 +163,8 @@ def get_badge_info_with_username(username: str):
     return None
 
 
-def get_all_badge_info_as_csv():
-    # Convert badge_info database table to a csv file
+def get_all_badge_info_as_xlsx():
+    # Convert badge_info database table to a xlsx file
     connection = db_connect()
     cursor = connection.cursor()
     
@@ -172,7 +172,7 @@ def get_all_badge_info_as_csv():
     cursor.execute(query)
     result = cursor.fetchall()
     
-    file_name = "badge_info.csv"
+    file_name = "badge_info.xlsx"
     
     # Delete the file if it exists
     try:
@@ -181,9 +181,10 @@ def get_all_badge_info_as_csv():
         pass
     
     file = open(file_name, "w")
-    # Create a csv file
+    # Create a xlsx file
+    file.write("Discord Kullanıcı Adı\tAd Soyad\tProfil URL\tBadge Listesi\tBadge Sayısı\tHata Bilgisi\tSon Kontrol Tarihi\n")
     for row in result:
-        file.write(f"{row[0]},{row[1]},{row[2]},{row[3]},{row[4]},{row[5]},{row[6]}\n")
+        file.write("\t".join([str(x) for x in row]) + "\n")
     
     # Return the absolute path of the file
     return os.path.abspath(file_name)
