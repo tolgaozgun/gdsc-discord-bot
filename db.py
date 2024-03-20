@@ -174,7 +174,8 @@ def get_all_badge_info_as_xlsx(file_name="badge_info.xlsx"):
     
     # Write a query to get all the badge info and right join it with the user_urls table
     # Use username as the key to join the tables
-    query = "SELECT * FROM badge_info FROM badge_info RIGHT JOIN user_urls ON badge_info.username = user_urls.username"
+    # And get email from user_urls table
+    query = "SELECT badge_info.username, badge_info.name, user_urls.url, badge_info.badge_info, badge_info.badge_count, badge_info.error_info, badge_info.lastChecked, user_urls.email FROM badge_info RIGHT JOIN user_urls ON badge_info.username = user_urls.username"
     cursor.execute(query)
     result = cursor.fetchall()
 
