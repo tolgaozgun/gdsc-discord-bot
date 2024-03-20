@@ -10,6 +10,9 @@ from db import create_db_tables
 from config import DISCORD_TOKEN
 from commands.register import register_command
 import logging
+import os 
+
+os.environ['TZ'] = 'Europe/Istanbul'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
