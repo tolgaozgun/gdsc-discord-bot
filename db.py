@@ -203,7 +203,7 @@ def get_all_badge_info_as_xlsx(file_name="badge_info.xlsx"):
         extended_rows.append(extended_row)
 
     # Define column names, assuming the first part of the header is static
-    headers = ["Discord Kullanıcı Adı", "Ad Soyad", "Profil URL", "Badge Sayısı", "Hata Bilgisi", "Son Kontrol Tarihi"]
+    headers = ["Discord Kullanıcı Adı", "Ad Soyad", "Profil URL", "Badge Sayısı", "Hata Bilgisi", "Son Kontrol Tarihi", "Email"]
     # Dynamically add JSON keys as headers. Assuming all rows have the same keys in the JSON part
     json_keys = list(json.loads(result[0][3]).keys())  # Parse JSON from the first row to get keys
     headers.extend(json_keys)
