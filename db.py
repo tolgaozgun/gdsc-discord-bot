@@ -2,6 +2,8 @@ import os
 import mysql.connector
 from config import DB_CONFIG
 import logging
+import pandas as pd
+
 
 import logging
 
@@ -172,6 +174,10 @@ def get_all_badge_info_as_xlsx():
     cursor.execute(query)
     result = cursor.fetchall()
     
+    if not result:
+        logging.error("get_all_badge_info_as_xlsx: result returned None.")
+        return None
+    
     file_name = "badge_info.xlsx"
     
     # Delete the file if it exists
@@ -180,11 +186,8 @@ def get_all_badge_info_as_xlsx():
     except FileNotFoundError:
         pass
     
-    file = open(file_name, "w")
-    # Create a xlsx file
-    file.write("Discord Kullanıcı Adı\tAd Soyad\tProfil URL\tBadge Listesi\tBadge Sayısı\tHata Bilgisi\tSon Kontrol Tarihi\n")
-    for row in result:
-        file.write("\t".join([str(x) for x in row]) + "\n")
+    # Create a new xlsx file with pandas
+    pd.DataFrame(result).to_excel(file_name, header=["Discord Kullanıcı Adı", "Ad Soyad", "Profil URL", "Badge Listesi", "Badge Sayısı", "Hata Bilgisi", "Son Kontrol Tarihi"], index=False)
     
     # Return the absolute path of the file
-    return os.path.abspath(file_name)
+    return os.path.join(os.getcwd(), file_name)
