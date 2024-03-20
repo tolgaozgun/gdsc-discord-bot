@@ -1,3 +1,4 @@
+import os
 import mysql.connector
 from config import DB_CONFIG
 import logging
@@ -161,3 +162,28 @@ def get_badge_info_with_username(username: str):
         return result
     return None
 
+
+def get_all_badge_info_as_csv():
+    # Convert badge_info database table to a csv file
+    connection = db_connect()
+    cursor = connection.cursor()
+    
+    query = "SELECT * FROM badge_info"
+    cursor.execute(query)
+    result = cursor.fetchall()
+    
+    file_name = "badge_info.csv"
+    
+    # Delete the file if it exists
+    try:
+        os.remove(file_name)
+    except FileNotFoundError:
+        pass
+    
+    file = open(file_name, "w")
+    # Create a csv file
+    for row in result:
+        file.write(f"{row[0]},{row[1]},{row[2]},{row[3]},{row[4]},{row[5]},{row[6]}\n")
+    
+    # Return the absolute path of the file
+    return os.path.abspath(file_name)

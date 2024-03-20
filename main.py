@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 from commands.badge import badge_command
+from commands.badge_table import badge_table_command
 from commands.give_role import give_role_command
 from commands.ingest import ingest_command
 from commands.scan import scan_command
@@ -58,5 +59,11 @@ async def register(interaction: discord.Interaction, file: discord.Attachment):
 @commands.has_permissions(administrator=True)
 async def register(interaction: discord.Interaction):
     await give_role_command(bot, interaction)
+
+
+@bot.tree.command(name="badge-table", description="Badge table as a csv file")
+@commands.has_permissions(administrator=True)
+async def register(interaction: discord.Interaction):
+    await badge_table_command(bot, interaction)
     
 bot.run(DISCORD_TOKEN)
