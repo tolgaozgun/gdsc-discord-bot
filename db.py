@@ -1,4 +1,6 @@
+import json
 import os
+import typing
 import mysql.connector
 from config import DB_CONFIG
 import logging
@@ -165,27 +167,51 @@ def get_badge_info_with_username(username: str):
     return None
 
 
-def get_all_badge_info_as_xlsx(file_name = "badge_info.xlsx"):
-    # Convert badge_info database table to a xlsx file
+def get_all_badge_info_as_xlsx(file_name="badge_info.xlsx"):
+    # Connect to the database (assuming db_connect is defined elsewhere)
     connection = db_connect()
     cursor = connection.cursor()
-    
+
+    # Execute the query
     query = "SELECT * FROM badge_info"
     cursor.execute(query)
     result = cursor.fetchall()
-    
+
+    # Check if the result is empty
     if not result:
         logging.error("get_all_badge_info_as_xlsx: result returned None.")
         return None
-    
+
+    # Process each row to parse the JSON in the fourth column and extend it
+    extended_rows = []
+    for row in result:
+        # Assuming the fourth column contains the JSON string
+        badge_list = json.loads(row[3])  # Parse JSON string
+        extended_row = list(row[:3]) + list(row[4:])  # Exclude the original JSON string column
+
+        # Add JSON key-value pairs to the row
+        for key, value in badge_list.items():
+            extended_row.append(value)
+
+        extended_rows.append(extended_row)
+
+    # Define column names, assuming the first part of the header is static
+    headers = ["Discord Kullanıcı Adı", "Ad Soyad", "Profil URL", "Badge Sayısı", "Hata Bilgisi", "Son Kontrol Tarihi"]
+    # Dynamically add JSON keys as headers. Assuming all rows have the same keys in the JSON part
+    json_keys = list(json.loads(result[0][3]).keys())  # Parse JSON from the first row to get keys
+    headers.extend(json_keys)
+
+    # Convert the list of extended rows into a DataFrame
+    df = pd.DataFrame(extended_rows, columns=headers)
+
     # Delete the file if it exists
     try:
         os.remove(file_name)
     except FileNotFoundError:
         pass
-    
-    # Create a new xlsx file with pandas
-    pd.DataFrame(result).to_excel(file_name, header=["Discord Kullanıcı Adı", "Ad Soyad", "Profil URL", "Badge Listesi", "Badge Sayısı", "Hata Bilgisi", "Son Kontrol Tarihi"], index=False)
-    
+
+    # Export DataFrame to an XLSX file
+    df.to_excel(file_name, index=False)
+
     # Return the absolute path of the file
-    return os.path.join(os.getcwd(), file_name)
+    return os.path.abspath(file_name)
