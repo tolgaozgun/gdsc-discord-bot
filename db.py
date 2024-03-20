@@ -171,11 +171,17 @@ def get_all_badge_info_as_xlsx(file_name="badge_info.xlsx"):
     # Connect to the database (assuming db_connect is defined elsewhere)
     connection = db_connect()
     cursor = connection.cursor()
-
-    # Execute the query
-    query = "SELECT * FROM badge_info"
+    
+    # Write a query to get all the badge info and right join it with the user_urls table
+    # Use username as the key to join the tables
+    query = "SELECT * FROM badge_info FROM badge_info RIGHT JOIN user_urls ON badge_info.username = user_urls.username"
     cursor.execute(query)
     result = cursor.fetchall()
+
+    # # Execute the query
+    # query = "SELECT * FROM badge_info"
+    # cursor.execute(query)
+    # result = cursor.fetchall()
 
     # Check if the result is empty
     if not result:
