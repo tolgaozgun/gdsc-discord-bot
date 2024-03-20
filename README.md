@@ -1,6 +1,6 @@
-# GDSC Turkey Generative AI for Developers Learning Path Bot
+# GDSC Turkiye Generative AI for Developers Learning Path Bot
 
-This repository contains the code for a Discord bot specifically designed for the GDSC Turkey's Generative AI for Developers Learning Path program. The bot is equipped with various commands and utilities to support program activities and enhance the experience of its participants.
+This repository contains the code for a Discord bot specifically designed for the GDSC Turkiye's Generative AI for Developers Learning Path program. The bot is equipped with various commands and utilities to support program activities and enhance the experience of its participants.
 
 ## Features
 
@@ -56,4 +56,4 @@ This project is licensed under the Apache License - see the LICENSE file for det
 
 ## Acknowledgments
 
-A special thanks to all the contributors and the GDSC Turkey community for supporting the Generative AI for Developers Learning Path program.
+A special thanks to all the contributors and the GDSC Turkiye community for supporting the Generative AI for Developers Learning Path program.
