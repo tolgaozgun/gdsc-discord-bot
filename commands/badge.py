@@ -55,10 +55,13 @@ async def badge_command(bot, interaction: discord.Interaction, user: discord.Use
         message_str += f"Hata: {info[5]}\n"
     if info[4]:
         message_str += f"Total badge sayısı: {info[4]}\n"
+    else:
+        message_str += f"Total badge sayısı: 0\n"
     if badge_str:
         message_str += f"Badge durumu:\n{badge_str}\n"
     if info[6]:
-        message_str += f"Son kontrol tarihi: {info[6]}\n"
+        # Remove last 7 characters from the info[6] string
+        message_str += f"Son kontrol tarihi: {info[6][:-7]}\n"
     
     await interaction.response.send_message(message_str)
     
