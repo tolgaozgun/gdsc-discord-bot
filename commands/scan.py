@@ -6,8 +6,13 @@ from utils.scrape_badges import scrape_badges
 
 
 async def scan_command(bot, interaction: discord.Interaction): 
-    await interaction.response.send_message("Lütfen bekleyin...")
+    
+    if not interaction.user.guild_permissions.administrator:
+        await interaction.response.send_message(f"Hata: {interaction.user.mention} bu komutu sadece adminler kullanabilir.")
+        return
 
+    await interaction.response.send_message("Lütfen bekleyin...")
+    
     # Get all urls from the database
     result = get_all_users()
     

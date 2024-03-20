@@ -29,7 +29,7 @@ async def give_role_command(bot, interaction: discord.Interaction):
         member = interaction.guild.get_member_named(username)
         if member is not None:
             success_count += 1
-            role = discord.utils.get(interaction.guild.roles, name="TestRole")
+            role = discord.utils.get(interaction.guild.roles, name="Attendee")
             members_given.append(usernames)
             await member.add_roles(role)
         else:

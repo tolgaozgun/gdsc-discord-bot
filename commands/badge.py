@@ -8,17 +8,25 @@ from utils.scrape_badges import scrape_badges
 
 
 async def badge_command(bot, interaction: discord.Interaction, user: discord.User = None): 
-    # TODO: Add database or local .xlsx file check
-    # Should return the latest check date, which badges are earned and which are not
-    # Should also return the total badge count
-    
     if user is None:
         user = interaction.user
+    else:
+        if not interaction.user.guild_permissions.administrator:
+            await interaction.response.send_message(f"Hata: {interaction.user.mention} sadece kendi badge'lerinizi görebilirsiniz.")
+            return
+        
+    # Get user roles
+    user_roles = interaction.user.roles
+    
+    # Check if the user has the "Attendee" role
+    if not any(role.name == "Attendee" for role in user_roles):
+        await interaction.response.send_message(f"Hata: {user.mention} 'Attendee' rolünüz yok. Lütfen önce /register komutu ile kayıt olun.")
+        return
         
     info = get_badge_info_with_username(user.name)
     
     if not info:
-        await interaction.response.send_message(f"Hata: {user.mention} kullanıcı bulunamadı. Lütfen önce /register komutu ile kayıt olun.")
+        await interaction.response.send_message(f"Hata: {user.mention} bot henüz profilinize bakmamış, birkaç saat içerisinde tekrar deneyin.")
         return
     
     # Print the info for the following database table:
