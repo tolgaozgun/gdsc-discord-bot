@@ -69,7 +69,10 @@ async def ingest_command(bot, interaction: discord.Interaction, file: discord.At
             await progress_message.edit(content="Tarama ilerlemesi: " + str(index + 1) + "/" + str(total_rows) + ".\nBaşarılı: " + str(success_count) + ", Başarısız: " + str(failure_count))
 
     # Final update to indicate completion
-    await progress_message.edit(content="Dokuman başarıyla işlendi. Toplam: " + str(added_amount) + " ekleme yapıldı. Hatalar:")
+    msg_content = "Dokuman başarıyla işlendi. Toplam: " + str(added_amount) + " ekleme yapıldı."
+    if not_added:
+        msg_content += " Hatalar:"
+    await progress_message.edit(content=msg_content)
     
     
     # Send a message to the interaction channel with the result for each 2000 characters

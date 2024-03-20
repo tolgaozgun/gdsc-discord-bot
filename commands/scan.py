@@ -27,7 +27,10 @@ async def scan_command(bot, interaction: discord.Interaction):
     issues, success = await scrape_badges(urls, update_progress)
     
     msg = await interaction.original_response()
-    await msg.edit(content=f"İşlem tamamlandı. {success} tane profil başarıyla tarandı. Hatalar:")
+    msg_content = f"İşlem tamamlandı. {success} tane profil başarıyla tarandı."
+    if issues:
+        msg_content += " Hatalar:"
+    await msg.edit(content=msg_content)
     
     # Send a message to the interaction channel with the result for each 2000 characters
     total_char = 0
